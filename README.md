@@ -1,2 +1,2 @@
-# lorge-neko
-this is for something in the future 
+# StudentList
+StudentList progam keeping track of student information 
