@@ -25,7 +25,6 @@ ostream &operator<<(ostream &os, const student &val) {
 }
 
 void add(vector<student*>*);
-//void add(vector<student*>& paramlist);
 
 //adding
 void add(vector<student*>* paramlist) {
