@@ -51,6 +51,10 @@ int main() {
             del(list); 
             cout << "Student Deleted!" << endl;
         }
+        else if (strcmp(cmd, "QUIT") == 0) {
+             cout << "See you next time..."; 
+             break;
+        }
         else 
             cout << "Invalid Input, dummy"; 
     }
