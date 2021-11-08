@@ -1,108 +1,99 @@
-#include <iostream>
-#include <cstring>
-#include<vector>
+//Author: Raed K
+//Date: November 7th 2021 
+//This program compiles a list of students based on user input using vector pointers, which points to a struct 
+
+#include <iostream> 
+#include <vector> 
+#include <cstring> 
 #include <iomanip>
 
-using namespace std;
+using namespace std; 
 
-//struct for the students
-struct student{
-  char* fName;
-  char* lName;
-  int id;
-  float gpa;
-};
+  //student struct
+  struct student{
+        char fname[20]; 
+        char lname[20]; 
+        float gpa; 
+        int ID; 
+ };
 
-//operator overload for struct
-ostream &operator<<(ostream &os, const student &val) {
-  os
-    << "Name: " << val.fName << " " << val.lName
-    << ", ID: " << val.id
-    << ", GPA: " << setprecision(2) << fixed << val.gpa
-    << endl;
-
-  return os;
-}
-
-void add(vector<student*>*);
-
-//adding
-void add(vector<student*>* paramlist) {
-  student* s = new student();
-  s->fName = new char[25];
-  s->lName = new char[25];
-
-  cout << "Enter first name" << endl;
-  cin >> s->fName;
-
-  cout << "Enter last name" << endl;
-  cin >> s->lName;
-
-  cout << "Enter ID" << endl;
-  cin >> s->id;
-
-  cout << "Enter GPA" << endl;
-  cin >> s->gpa;
-
-  paramlist->push_back(s);
-}
-
-void del(vector<student*> *list) {
-  int ID;
-  cout << "ID of student you want to delete: ";
-
-  cin >> ID;
-  int position = 0;
-  //iterate through vector
-  for (vector<student*>::iterator j = list->begin(); j != list->end(); ++j) {
-    //if given value is equal to a value in vector
-    if((*j) -> id == ID) {
-      list->erase(list->begin() + position);
-      break;
-    }
-    else
-      position++;
-  }
-}
-
-void print(vector<student*> *list) {
-  //iterate through
-  for(vector<student*>::iterator i = list->begin(); i != list->end(); i++) {
-    cout << **i;
-  }
-}
+//function prototypes 
+void add(vector<student*> *list); 
+void print(vector<student*> *list);
+void del(vector<student*> *list); 
 
 int main() {
-  bool run = true;
-  //vector
-  vector <student*>* list = new vector<student*>();
+    bool run = true;
+     //vector
+    vector <student*>* list = new vector<student*>();
 
-  char cmd[10];
+    char cmd[10];
 
-  while (run == true) {
-    cout << "\nWould you like to ADD, DELETE, PRINT, or QUIT" << endl;
-    cin >> cmd;
+    while (run == true) {
+        cout << "\nWould you like to ADD, DELETE, PRINT, or QUIT" << endl;
+        cin >> cmd;
 
-    //add student
-    if (strcmp(cmd,"ADD") == 0) {
-      add(list);
-      cout << "Student entered!" << endl;
-      
+        //add student
+        if (strcmp(cmd,"ADD") == 0) {
+            add(list); 
+        }
+        //print everyone
+        else if (strcmp(cmd,"PRINT") == 0) {
+            if (list->empty()) {
+              cout << "There are no students entered" << endl; 
+            } 
+            else {
+              print(list); 
+              cout << "Students Listed!" << endl;
+          }
+        }
+        else if (strcmp(cmd,"DELETE") == 0) { 
+            del(list); 
+            cout << "Student Deleted!" << endl;
+        }
+        else 
+            cout << "Invalid Input, dummy"; 
     }
-    //delete student
-    else if (strcmp(cmd,"DELETE") == 0) {
-      del(list);
-      cout << "Student deleted!";
-
-    }
-    //print out students
-    else if (strcmp(cmd,"PRINT") == 0)
-      print(list);
-    //quitting
-    else if (strcmp(cmd,"QUIT") == 0)
-      exit(0); 
-    else
-      cout << "Invalid";
-
-  }
 }
+
+void add(vector<student*> *list) {
+    //create a new student everytime a user wants to add 
+    student* s = new student(); 
+
+    //inputting data into new student object 
+    cout << "Enter First Name: " << endl; 
+    cin >> s->fname; 
+    cout << "Enter Last Name: " << endl; 
+    cin >> s->lname;
+    cout << "Enter GPA: " << endl; 
+    cin >> s->gpa; 
+    cout << "Enter ID: " << endl; 
+    cin >> s->ID; 
+  
+    list->push_back(s); //insert student from back 
+}
+
+
+void print(vector<student*> *list) {
+    //iterate through entire vector; print out each student, specifically the data within each student
+    for (vector<student*>::iterator iter = list->begin(); iter != list->end(); ++iter) {
+        cout << "NAME: " << (*iter)->fname << " " << (*iter)->lname << " "; cout << "ID: " << (*iter)->ID << " ";
+        //round gpa 
+        cout << "GPA: " << fixed << setprecision(2) << (*iter)->gpa << endl;
+    }
+}
+void del(vector<student*> *list) {
+    int check; 
+    int count = 0; 
+    cout << "Enter the ID of the student you wish to delete: " << endl; 
+    cin >> check;
+    //iterate through vector and if a student as the same ID 
+    for (vector<student*>::iterator iter = list->begin(); iter != list->end(); ++iter) {
+        if ((*iter)->ID == check) { //if same ID, erase element
+            list->erase(list->begin() + count); //erase using distance from beginning of array 
+            break; //break out, or else segmentation fault
+        }
+        else
+          count++;  //iteraate count to next position.
+    }
+} 
